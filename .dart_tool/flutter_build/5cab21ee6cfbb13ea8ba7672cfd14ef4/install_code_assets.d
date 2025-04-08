@@ -1,0 +1,1 @@
+ C:\\Users\\ruloe\\Desktop\\ITH\\ubIA\\ubIA\\.dart_tool\\flutter_build\\5cab21ee6cfbb13ea8ba7672cfd14ef4\\native_assets.json: 
