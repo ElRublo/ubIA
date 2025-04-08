@@ -83,13 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Welcome Back',
+                  'Bienvenido',
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Sign in to continue',
+                  'Inicia sesion para continuar',
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -117,10 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Por favor ingrese su Email';
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Please enter a valid email';
+                      return 'Ingrese un Email valido';
                     }
                     return null;
                   },
@@ -128,15 +128,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: _passwordController,
-                  hintText: 'Password',
+                  hintText: 'Contraseña',
                   prefixIcon: Icons.lock_outline,
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Por favor ingrese su contraseña';
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return 'Su contraseña debe de tener al menos 6 caracteres';
                     }
                     return null;
                   },
@@ -151,12 +151,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Sign In'),
+                      : const Text('Inicia sesion'),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: _navigateToRegister,
-                  child: const Text('Don\'t have an account? Sign Up'),
+                  child: const Text('No tienes una cuenta? Registrate'),
                 ),
               ],
             ),

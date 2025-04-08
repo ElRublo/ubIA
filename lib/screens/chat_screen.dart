@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 
                 if (messages.isEmpty) {
                   return const Center(
-                    child: Text('No messages yet'),
+                    child: Text('Sin mensajes aún'),
                   );
                 }
                 
@@ -143,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: 'Type a message...',
+                      hintText: 'Escribe un mensaje...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,

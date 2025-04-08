@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Account'),
+        title: const Text('Crear Cuenta'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -78,13 +78,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Join Us Today',
+                  'Unete',
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Create an account to get started',
+                  'Crea una cuenta para comenzar',
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -107,11 +107,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
                 CustomTextField(
                   controller: _nameController,
-                  hintText: 'Full Name',
+                  hintText: 'Nombre completo',
                   prefixIcon: Icons.person_outline,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
+                      return 'Por favor ingresa tu nombre';
                     }
                     return null;
                   },
@@ -124,10 +124,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Por favor ingrese su email';
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Please enter a valid email';
+                      return 'Ingrese un email valido';
                     }
                     return null;
                   },
@@ -135,15 +135,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: _passwordController,
-                  hintText: 'Password',
+                  hintText: 'Contraseña',
                   prefixIcon: Icons.lock_outline,
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
+                      return 'Por favor ingrese una contraseña';
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return 'Su contraseña debe tener mas de 6 caracteres';
                     }
                     return null;
                   },
@@ -151,15 +151,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: _confirmPasswordController,
-                  hintText: 'Confirm Password',
+                  hintText: 'Confirma contraseña',
                   prefixIcon: Icons.lock_outline,
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
+                      return 'Por favor confirme su contraseña';
                     }
                     if (value != _passwordController.text) {
-                      return 'Passwords do not match';
+                      return 'Las contraseñas no coinciden';
                     }
                     return null;
                   },
@@ -174,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Sign Up'),
+                      : const Text('Registrate'),
                 ),
               ],
             ),
