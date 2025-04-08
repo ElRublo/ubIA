@@ -34,8 +34,8 @@ class UserModel {
   // Método para actualizar el usuario
   UserModel update({String? displayName, String? photoUrl}) {
     return UserModel(
-      uid: this.uid,
-      email: this.email,
+      uid: uid,
+      email: email,
       displayName: displayName ?? this.displayName,
       photoUrl: photoUrl ?? this.photoUrl,
     );
