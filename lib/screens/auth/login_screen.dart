@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chat_app/services/auth_service.dart';
-import 'package:chat_app/screens/auth/register_screen.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/widgets/custom_text_field.dart';
 
@@ -58,12 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _navigateToRegister() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const RegisterScreen()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,15 +105,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
                 CustomTextField(
                   controller: _emailController,
-                  hintText: 'Email',
+                  hintText: 'Correo',
                   prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor ingrese su Email';
+                      return 'Por favor ingrese su correo';
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Ingrese un Email valido';
+                      return 'Porfavor ingrese un correo valido';
                     }
                     return null;
                   },
@@ -136,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       return 'Por favor ingrese su contraseña';
                     }
                     if (value.length < 6) {
-                      return 'Su contraseña debe de tener al menos 6 caracteres';
+                      return 'La contraseña debe tener mas de 6 caracteres';
                     }
                     return null;
                   },
@@ -151,13 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Inicia sesion'),
+                      : const Text('Iniciar Sesion'),
                 ),
                 const SizedBox(height: 16),
-                TextButton(
-                  onPressed: _navigateToRegister,
-                  child: const Text('No tienes una cuenta? Registrate'),
-                ),
               ],
             ),
           ),
@@ -166,4 +155,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
