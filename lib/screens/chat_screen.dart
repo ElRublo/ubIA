@@ -51,7 +51,6 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     try {
-      // Add user message
       await _chatService.addMessage(widget.chatId, message, true);
       
       // In a real app, you would call your AI service here

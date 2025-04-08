@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'AI Chat Assistant',
+              'ubIA: Agente Inteligente',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 24),

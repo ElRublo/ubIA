@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Chat Assistant'),
+        title: const Text('ubIA: Agente Inteligente'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
