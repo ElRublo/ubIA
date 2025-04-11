@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     
     try {
-      final chat = await _chatService.createChat('Chat Nuevo');
+      final chat = await _chatService.createChat('Nueva Sesión');
       
       if (!mounted) return;
       Navigator.of(context).push(
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error creando chat: ${e.toString()}')),
+        SnackBar(content: Text('Error creando sesión: ${e.toString()}')),
       );
     } finally {
       if (mounted) {
@@ -60,11 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await _chatService.deleteChat(chatId);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Chat Eliminado')),
+        const SnackBar(content: Text('Sesión Eliminada')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error eliminando chat: ${e.toString()}')),
+        SnackBar(content: Text('Error eliminando sesión: ${e.toString()}')),
       );
     }
   }
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               children: [
                 Text(
-                  'Tus chats',
+                  'Tus sesiones',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const Spacer(),
@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.add),
-                  label: const Text('Nuevo Chat'),
+                  label: const Text('Nueva sesion'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -186,12 +186,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Sin chats aún',
+                          'Sin sesiones aún',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Empezar un nuevo chat',
+                          'Empezar una nueva sesión',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _createNewChat,
-        tooltip: 'Nuevo Chat',
+        tooltip: 'Nueva sesión',
         child: _isCreatingChat
             ? const CircularProgressIndicator(color: Colors.white)
             : const Icon(Icons.add),

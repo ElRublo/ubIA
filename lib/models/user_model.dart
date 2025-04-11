@@ -17,7 +17,7 @@ class UserModel {
       uid: map['uid'] ?? '',
       email: map['email'] ?? '',
       displayName: map['displayName'] ?? 'No Display Name',
-      photoUrl: map['photoUrl'] ?? 'default_photo_url', // Puedes poner un URL por defecto
+      photoUrl: map['photoUrl'] ?? 'default_photo_url', 
     );
   }
 

@@ -20,7 +20,7 @@ class AuthService extends ChangeNotifier {
       notifyListeners();
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      throw e.message ?? 'An error occurred during sign in';
+      throw e.message ?? 'Ocurrió un error al iniciar sesión';
     }
   }
   
