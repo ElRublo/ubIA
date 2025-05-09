@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:chat_app/services/chat_service.dart';
 import 'package:chat_app/models/chat_model.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -20,6 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatService _chatService = ChatService();
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isSending = false;
 
   @override
@@ -53,17 +57,47 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       await _chatService.addMessage(widget.chatId, message, true);
       
-      // In a real app, you would call your AI service here
-      // For this example, we'll just simulate a response
-      await Future.delayed(const Duration(seconds: 1));
+      final userId = _auth.currentUser?.uid ?? '';
+      
+      final encodedMessage = Uri.encodeComponent(message);
+      final url = Uri.parse(
+        'https://webhookn8ntest.ubicuo.mx/webhook/ubiIA?message=$encodedMessage&user_id=$userId'
+      );
+      
+      final response = await http.get(url);
+      
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        final aiResponse = jsonResponse['output'] as String;
+        
+        await _chatService.addMessage(
+          widget.chatId,
+          aiResponse,
+          false,
+        );
+      } else {
+        print('Error del servicio de agente inteligente: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        
+        await _chatService.addMessage(
+          widget.chatId,
+          "Lo siento, tengo problemas para conectarme a mi cerebro ahora mismo. Inténtalo de nuevo más tarde.",
+          false,
+        );
+      }
+    } catch (e) {
+      print('Excepción al llamar al servicio de agente inteligente: $e');
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error enviando el mensaje: ${e.toString()}')),
+        );
+      }
+      
       await _chatService.addMessage(
         widget.chatId,
-        "I'm your AI assistant. I'm here to help with any questions you might have!",
+        "Lo siento, se produjo un error. Inténtalo de nuevo más tarde.",
         false,
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error sending message: ${e.toString()}')),
       );
     } finally {
       if (mounted) {
@@ -82,7 +116,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          // Messages list
           Expanded(
             child: StreamBuilder<List<Message>>(
               stream: _chatService.getChatMessages(widget.chatId),
@@ -92,6 +125,29 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
                 
                 if (snapshot.hasError) {
+                  final errorMessage = snapshot.error.toString();
+                  if (errorMessage.contains('El index se está construyendo')) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Configurando tu chat...',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Esto puede tardar unos minutos. Espere o inténtelo de nuevo más tarde.',
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  
+                  // For other errors
                   return Center(
                     child: Text('Error: ${snapshot.error}'),
                   );
@@ -101,7 +157,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 
                 if (messages.isEmpty) {
                   return const Center(
-                    child: Text('Sin mensajes aún'),
+                    child: Text('Sin mensajes aún...'),
                   );
                 }
                 
@@ -143,13 +199,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: 'Escribe un mensaje...',
+                      hintText: 'Escribe tu mensaje...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      fillColor: Theme.of(context).colorScheme.surfaceVariant,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 12,
@@ -201,7 +257,7 @@ class _MessageBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: isUser
               ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.surfaceContainerHighest,
+              : Theme.of(context).colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(16),
         ),
         constraints: BoxConstraints(
@@ -210,12 +266,15 @@ class _MessageBubble extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              message,
-              style: TextStyle(
-                color: isUser
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  color: isUser
                     ? Theme.of(context).colorScheme.onPrimary
                     : Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                ),
+                children: _parseMessage(message, isUser, context),
               ),
             ),
             const SizedBox(height: 4),
@@ -237,5 +296,63 @@ class _MessageBubble extends StatelessWidget {
   String _formatTime(DateTime time) {
     return '${time.hour}:${time.minute.toString().padLeft(2, '0')}';
   }
-}
 
+  List<TextSpan> _parseMessage(String message, bool isUser, BuildContext context) {
+    final defaultStyle = TextStyle(
+      color: isUser
+        ? Theme.of(context).colorScheme.onPrimary
+        : Theme.of(context).colorScheme.onSurfaceVariant,
+      fontSize: 16,
+    );
+
+    final boldStyle = defaultStyle.copyWith(fontWeight: FontWeight.bold);
+    final italicStyle = defaultStyle.copyWith(fontStyle: FontStyle.italic);
+    final titleStyle = defaultStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w600);
+
+    List<TextSpan> spans = [];
+
+    final lines = message.split('\n');
+
+    for (var line in lines) {
+      if (line.trim().isEmpty) {
+        spans.add(const TextSpan(text: '\n'));
+        continue;
+      }
+
+      if (line.startsWith('### ')) {
+        spans.add(TextSpan(text: '${line.substring(4)}\n', style: titleStyle));
+        continue;
+      }
+
+      final regex = RegExp(r'(\*\*(.*?)\*\*|\*(.*?)\*)');
+      final matches = regex.allMatches(line);
+
+      int lastEnd = 0;
+      for (final match in matches) {
+        if (match.start > lastEnd) {
+          spans.add(TextSpan(
+            text: line.substring(lastEnd, match.start),
+            style: defaultStyle,
+          ));
+        }
+
+        if (match.group(2) != null) {
+          spans.add(TextSpan(text: match.group(2), style: boldStyle));
+        }
+        else if (match.group(3) != null) {
+          spans.add(TextSpan(text: match.group(3), style: italicStyle));
+        }
+
+        lastEnd = match.end;
+      }
+
+      if (lastEnd < line.length) {
+        spans.add(TextSpan(text: line.substring(lastEnd), style: defaultStyle));
+      }
+
+      spans.add(const TextSpan(text: '\n'));
+    }
+
+    return spans;
+  }
+}

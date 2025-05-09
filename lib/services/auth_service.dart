@@ -24,39 +24,6 @@ class AuthService extends ChangeNotifier {
     }
   }
   
-  // Register with email and password
-  Future<UserCredential?> register(String email, String password, String displayName) async {
-    try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      
-      // Update display name
-      await userCredential.user?.updateDisplayName(displayName);
-      
-      // Create user document in Firestore
-      await _createUserDocument(userCredential.user!, displayName);
-      
-      notifyListeners();
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      throw e.message ?? 'An error occurred during registration';
-    }
-  }
-  
-  // Create user document in Firestore
-  Future<void> _createUserDocument(User user, String displayName) async {
-    UserModel userModel = UserModel(
-      uid: user.uid,
-      email: user.email!,
-      displayName: displayName,
-      photoUrl: user.photoURL,
-    );
-    
-    await _firestore.collection('users').doc(user.uid).set(userModel.toMap());
-  }
-  
   // Sign out
   Future<void> signOut() async {
     await _auth.signOut();

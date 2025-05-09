@@ -53,7 +53,7 @@ class ChatService {
     // Add AI response (in a real app, this would come from your AI service)
     await addMessage(
       chatId, 
-      "Hello! I'm your AI assistant. How can I help you today?", 
+      "¡Hola! Soy tu Agente Inteligente. ¿Como puedo ayudarte hoy?", 
       false
     );
     
