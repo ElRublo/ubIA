@@ -355,4 +355,5 @@ class _MessageBubble extends StatelessWidget {
 
     return spans;
   }
+  
 }
