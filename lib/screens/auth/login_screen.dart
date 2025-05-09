@@ -69,10 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
-                  Icons.chat_rounded,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.primary,
+                Image.asset(
+                  'assets/images/logo3d.png',
+                  height: 120,
+                  width: 120,
                 ),
                 const SizedBox(height: 24),
                 Text(
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Inicia sesion para continuar',
+                  'Inicia sesión para continuar',
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       return 'Por favor ingrese su correo';
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Porfavor ingrese un correo valido';
+                      return 'Por favor ingrese un correo valido';
                     }
                     return null;
                   },
@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       return 'Por favor ingrese su contraseña';
                     }
                     if (value.length < 6) {
-                      return 'La contraseña debe tener mas de 6 caracteres';
+                      return 'Su contraseña debe de tener al menos 6 caracteres';
                     }
                     return null;
                   },
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Iniciar Sesion'),
+                      : const Text('Iniciar sesión'),
                 ),
                 const SizedBox(height: 16),
               ],

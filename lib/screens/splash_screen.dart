@@ -49,14 +49,14 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.chat_rounded,
-              size: 80,
-              color: Theme.of(context).colorScheme.primary,
+            Image.asset(
+              'assets/images/logo3d.png',
+              height: 150,
+              width: 150,
             ),
             const SizedBox(height: 24),
             Text(
-              'ubIA: Agente Inteligente',
+              'UbIA: Agente Inteligente',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 24),
